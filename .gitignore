@@ -1,0 +1,14 @@
+# Node.js
+/frontend/node_modules
+
+# Laravel
+/backend/vendor
+/backend/public/storage
+/backend/storage/*.key
+/backend/.env
+/backend/Homestead.yaml
+/backend/Homestead.json
+/backend/.vagrant
+
+# Misc
+.DS_Store
