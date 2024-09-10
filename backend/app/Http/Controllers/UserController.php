@@ -1,32 +1,30 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\User;
+// Libraries
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+// Specific Requests
+use App\Http\Requests\StoreUserRequest;
+
+// Models
+use App\Models\User;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    public function register(StoreUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'Client',
+            'google_id' => $request->google_id,
         ]);
 
         return response()->json(['message' => 'User registered successfully'], 201);
@@ -45,7 +43,6 @@ class UserController extends Controller
 
             return response()->json([
                 'message' => 'Login successful',
-                'user' => $user,
                 'token' => $token
             ], 200);
         }
